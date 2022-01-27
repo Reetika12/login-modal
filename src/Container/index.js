@@ -1,33 +1,59 @@
 // import { Button } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import SignInModal from "../Component/SignINModal";
+import SignInModalWithoutFormik from "../Component/SignInModalWithoutFormik";
+
 function Main() {
   const [openDialog, setDialog] = useState(false);
+  const [flagForLoggedInPerson, setflagForLoggedInPerson] = useState(false);
+
+  useEffect(() => {}, [openDialog]);
   const openTheDialog = () => {
     setDialog(true);
   };
   const dismissLogin = () => {
     setDialog(false);
   };
+  const setTheflagOnceUserLoggedIn = () => {
+    setflagForLoggedInPerson(true);
+    setDialog(false);
+  };
+  const ChnagetoLoginEvent = () => {
+    setflagForLoggedInPerson(false);
+  };
   return (
-    <div>
+    <HomepageContainer>
       <Container>
         <Wrapbutton>
-          <Button onClick={() => openTheDialog()}>Login</Button>
+          {flagForLoggedInPerson ? (
+            <Button
+              onClick={() => {
+                ChnagetoLoginEvent();
+              }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button onClick={() => openTheDialog()}>Login</Button>
+          )}
         </Wrapbutton>
       </Container>
-      <SignInModal
+      <SignInModalWithoutFormik
         title={"Login / Signup"}
         openPopup={openDialog}
         onHide={dismissLogin}
+        getflagForLoggedInPerson={setTheflagOnceUserLoggedIn}
       />
-    </div>
+      {flagForLoggedInPerson ? (
+        <img src={require("../Images/backroundimage.jpeg")} alt="bg" />
+      ) : null}
+    </HomepageContainer>
   );
 }
 
 export default Main;
 
+const HomepageContainer = styled.div``;
 const Container = styled.div`
   position: fixed;
   width: 100%;
